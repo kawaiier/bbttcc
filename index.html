@@ -1,0 +1,389 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Bitcoin Profit Target Calculator</title>
+
+    <style>
+      @import url("https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&display=swap");
+
+      * {
+        box-sizing: border-box;
+        margin: 0;
+        padding: 0;
+      }
+
+      body {
+        font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+          Roboto, sans-serif;
+        max-width: 680px;
+        margin: 0 auto;
+        padding: 40px 20px;
+        background: #f0e6d3;
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-direction: column;
+      }
+
+      .container {
+        background: #ffffff;
+        border: 4px solid #000;
+        border-radius: 0;
+        padding: 40px;
+        box-shadow: 8px 8px 0 #000;
+        max-width: 600px;
+        width: 100%;
+        margin: 20px;
+      }
+
+      h2 {
+        text-align: center;
+        margin-bottom: 35px;
+        color: #000;
+        font-weight: 800;
+        font-size: 28px;
+        line-height: 1.3;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .input-group {
+        margin-bottom: 25px;
+      }
+
+      label {
+        font-weight: 700;
+        display: block;
+        margin-bottom: 8px;
+        color: #000;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      input {
+        width: 100%;
+        padding: 14px 16px;
+        margin-top: 6px;
+        font-size: 16px;
+        border: 3px solid #000;
+        border-radius: 0;
+        transition: all 0.15s ease;
+        background: #fff;
+        color: #000;
+        font-weight: 600;
+        box-shadow: 4px 4px 0 #000;
+      }
+
+      input:focus {
+        outline: none;
+        background: #fff;
+        box-shadow: 2px 2px 0 #000;
+        transform: translate(2px, 2px);
+      }
+
+      input::placeholder {
+        color: #666;
+        opacity: 1;
+        font-weight: 400;
+      }
+
+      .help-text {
+        display: block;
+        margin-top: 8px;
+        font-size: 12px;
+        color: #000;
+        font-weight: 600;
+        background: #fef08a;
+        padding: 6px 10px;
+        border: 2px solid #000;
+      }
+
+      .or-divider {
+        text-align: center;
+        color: #000;
+        font-weight: 700;
+        margin: 20px 0;
+        position: relative;
+        font-size: 14px;
+        text-transform: uppercase;
+        background: #a5f3fc;
+        padding: 8px;
+        border: 3px solid #000;
+      }
+
+      .or-divider::before,
+      .or-divider::after {
+        display: none;
+      }
+
+      button {
+        width: 100%;
+        margin-top: 30px;
+        padding: 16px;
+        font-size: 18px;
+        font-weight: 700;
+        background: #fef08a;
+        color: #000;
+        border: 4px solid #000;
+        cursor: pointer;
+        border-radius: 0;
+        transition: all 0.15s ease;
+        box-shadow: 6px 6px 0 #000;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      button:hover {
+        transform: translate(3px, 3px);
+        box-shadow: 3px 3px 0 #000;
+      }
+
+      button:active {
+        transform: translate(5px, 5px);
+        box-shadow: 1px 1px 0 #000;
+      }
+
+      .result {
+        margin-top: 35px;
+        padding: 25px;
+        background: #d1fae5;
+        border: 4px solid #000;
+        border-radius: 0;
+        font-size: 16px;
+        line-height: 1.7;
+        box-shadow: 6px 6px 0 #000;
+        animation: popIn 0.3s ease;
+      }
+
+      @keyframes popIn {
+        from {
+          opacity: 0;
+          transform: scale(0.95);
+        }
+        to {
+          opacity: 1;
+          transform: scale(1);
+        }
+      }
+
+      .highlight {
+        font-size: 24px;
+        font-weight: 800;
+        color: #000;
+        margin-bottom: 20px;
+        display: block;
+        text-align: center;
+        padding: 15px;
+        background: #fca5a5;
+        border: 4px solid #000;
+        border-radius: 0;
+        box-shadow: 4px 4px 0 #000;
+        text-transform: uppercase;
+      }
+
+      .result b {
+        color: #000;
+        font-weight: 700;
+      }
+
+      .result br {
+        margin-bottom: 8px;
+        display: block;
+      }
+
+      .error-output {
+        margin-top: 20px;
+        padding: 15px;
+        background: #fca5a5;
+        border: 4px solid #000;
+        color: #000;
+        font-weight: 700;
+      }
+
+      @media (max-width: 640px) {
+        .container {
+          padding: 25px 20px;
+          box-shadow: 6px 6px 0 #000;
+        }
+
+        h2 {
+          font-size: 22px;
+          margin-bottom: 25px;
+        }
+
+        .highlight {
+          font-size: 18px;
+          padding: 12px;
+        }
+
+        button {
+          box-shadow: 4px 4px 0 #000;
+        }
+
+        button:hover {
+          transform: translate(2px, 2px);
+          box-shadow: 2px 2px 0 #000;
+        }
+      }
+    </style>
+  </head>
+
+  <body>
+    <h2>Bitcoin Target Price & Profit Calculator</h2>
+
+    <!-- Inputs -->
+    <label>Total Bitcoins Owned (BTC):</label>
+    <div class="input-group">
+      <label for="btcOwned">Total Bitcoins Owned (BTC):</label>
+      <input
+        type="number"
+        id="btcOwned"
+        placeholder="Example: 1.5"
+        step="0.0001"
+        min="0"
+        max="1000000"
+        pattern="^\\d+(\\.\\d{1,6})?$"
+        required
+        aria-describedby="btcOwnedHelp"
+        aria-required="true"
+        aria-invalid="false"
+        aria-live="polite"
+      />
+      <small id="btcOwnedHelp" class="help-text">Enter the amount of BTC you own (up to 6 decimal places)</small>
+    </div>
+
+    <div class="input-group">
+      <label for="avgPrice">Average Buy Price per BTC ($):</label>
+      <input
+        type="number"
+        id="avgPrice"
+        placeholder="Example: 80000"
+        step="0.01"
+        min="1"
+        max="1000000"
+        pattern="^\\d+(\\.\\d{1,2})?$"
+        required
+        aria-describedby="avgPriceHelp"
+        aria-required="true"
+        aria-invalid="false"
+        aria-live="polite"
+      />
+      <small id="avgPriceHelp" class="help-text">Enter the average price you paid per BTC</small>
+    </div>
+
+    <div class="input-group">
+      <label for="profitUSD">Desired Profit ($):</label>
+      <input
+        type="number"
+        id="profitUSD"
+        placeholder="Example: 20000"
+        step="0.01"
+        min="0"
+        max="1000000"
+        pattern="^\\d+(\\.\\d{1,2})?$"
+        aria-describedby="profitUSDHelp"
+        aria-invalid="false"
+        aria-live="polite"
+      />
+      <small id="profitUSDHelp" class="help-text">Enter profit amount in USD (leave blank if using percentage)</small>
+    </div>
+
+    <div class="input-group">
+      <label for="profitPercent">OR Desired Profit (%):</label>
+      <input
+        type="number"
+        id="profitPercent"
+        placeholder="Example: 25"
+        step="0.01"
+        min="0"
+        max="1000"
+        pattern="^\\d+(\\.\\d{1,2})?$"
+        aria-describedby="profitPercentHelp"
+        aria-invalid="false"
+        aria-live="polite"
+      />
+      <small id="profitPercentHelp" class="help-text">Enter profit percentage (leave blank if using USD amount)</small>
+    </div>
+
+      <div class="input-group">
+        <button id="calculateBtn" type="button" onclick="calculate()">
+          <span id="btnText">Calculate Target Price</span>
+          <span id="btnSpinner" class="spinner" style="display: none;"></span>
+        </button>
+      </div>
+
+      <!-- Output -->
+      <div class="result" id="output" aria-live="polite"></div>
+
+      <!-- Error output -->
+      <div id="errorOutput" class="error-output" aria-live="polite" role="alert"></div>
+
+    <script>
+      function calculate() {
+        const btcOwned = parseFloat(document.getElementById("btcOwned").value);
+        const avgPrice = parseFloat(document.getElementById("avgPrice").value);
+        const profitUSD = parseFloat(
+          document.getElementById("profitUSD").value
+        );
+        const profitPercent = parseFloat(
+          document.getElementById("profitPercent").value
+        );
+
+        if (isNaN(btcOwned) || isNaN(avgPrice) || btcOwned <= 0) {
+          document.getElementById("output").innerHTML =
+            "⚠️ Please enter valid BTC amount and average price.";
+          return;
+        }
+
+        // Total investment cost basis
+        const totalCost = btcOwned * avgPrice;
+
+        // Break-even price is just the average price
+        const breakEvenPrice = avgPrice;
+
+        let desiredProfitValue = 0;
+
+        // User chooses either profit in USD or %
+        if (!isNaN(profitUSD) && profitUSD > 0) {
+          desiredProfitValue = profitUSD;
+        } else if (!isNaN(profitPercent) && profitPercent > 0) {
+          desiredProfitValue = totalCost * (profitPercent / 100);
+        } else {
+          document.getElementById("output").innerHTML =
+            "⚠️ Please enter either profit in USD or profit percentage.";
+          return;
+        }
+
+        // Required total sell value
+        const targetSellValue = totalCost + desiredProfitValue;
+
+        // Required BTC price
+        const targetBTCPrice = targetSellValue / btcOwned;
+
+        // Profit percentage achieved
+        const achievedPercent = (desiredProfitValue / totalCost) * 100;
+
+        document.getElementById("output").innerHTML = `
+        <div class="highlight">
+          ✅ Target BTC Price Needed: $${targetBTCPrice.toFixed(2)}
+        </div>
+        <br>
+
+        <b>Total BTC Owned:</b> ${btcOwned} BTC <br>
+        <b>Average Buy Price:</b> $${avgPrice.toFixed(2)} <br>
+        <b>Break-even BTC Price:</b> $${breakEvenPrice.toFixed(2)} <br><br>
+
+        <b>Total Investment Cost:</b> $${totalCost.toFixed(2)} <br>
+        <b>Desired Profit:</b> $${desiredProfitValue.toFixed(2)} <br>
+        <b>Profit Percentage:</b> ${achievedPercent.toFixed(2)}% <br><br>
+
+        <b>Total Sell Value Needed:</b> $${targetSellValue.toFixed(2)}
+      `;
+      }
+    </script>
+  </body>
+</html>
