@@ -1,4 +1,6 @@
 # Bitcoin Profit Target Calculator
+<img width="500" height="1057" alt="SCR-20260218-ovfk" src="https://github.com/user-attachments/assets/27fe713d-c42e-4cf6-8c5e-ed21a1c42986" />
+
 
 A simple, elegant web-based calculator that helps Bitcoin investors determine the target BTC price needed to achieve their desired profit.
 
