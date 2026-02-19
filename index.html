@@ -355,10 +355,318 @@
           font-size: 14px;
         }
       }
+
+      /* ─── THEME PICKER ─────────────────────────────────── */
+
+      .theme-picker {
+        display: flex;
+        gap: 10px;
+        justify-content: center;
+        margin-bottom: 20px;
+      }
+
+      .theme-btn {
+        width: auto;
+        margin-top: 0;
+        padding: 8px 14px;
+        font-size: 12px;
+        font-weight: 700;
+        border: 3px solid #000;
+        cursor: pointer;
+        border-radius: 0;
+        transition: all 0.15s ease;
+        box-shadow: 4px 4px 0 #000;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        will-change: transform;
+        -webkit-tap-highlight-color: transparent;
+        background: #fff;
+        color: #000;
+      }
+
+      .theme-btn:hover {
+        transform: translate(2px, 2px);
+        box-shadow: 2px 2px 0 #000;
+      }
+
+      .theme-btn:active {
+        transform: translate(3px, 3px);
+        box-shadow: 1px 1px 0 #000;
+      }
+
+      .theme-btn:focus-visible {
+        outline: 3px solid #3b82f6;
+        outline-offset: 2px;
+      }
+
+      .theme-btn.active {
+        transform: translate(3px, 3px);
+        box-shadow: 1px 1px 0 #000;
+      }
+
+      .theme-btn-default { background: #f0e6d3; }
+      .theme-btn-dark    { background: #1a1a1a; color: #ccff00; border-color: #000; }
+      .theme-btn-pink    { background: #f48fb1; }
+
+      /* ─── DARK THEME ───────────────────────────────────── */
+
+      body.theme-dark {
+        background: #1a1a1a;
+      }
+
+      body.theme-dark .container {
+        background: #2a2a2a;
+        border-color: #ccff00;
+        box-shadow: 8px 8px 0 #ccff00;
+      }
+
+      body.theme-dark h1 {
+        color: #ccff00;
+      }
+
+      body.theme-dark label {
+        color: #e0e0e0;
+      }
+
+      body.theme-dark input {
+        background: #1a1a1a;
+        color: #e0e0e0;
+        border-color: #ccff00;
+        box-shadow: 4px 4px 0 #ccff00;
+      }
+
+      body.theme-dark input:focus {
+        background: #1a1a1a;
+        box-shadow: 2px 2px 0 #ccff00;
+      }
+
+      body.theme-dark input:focus-visible {
+        outline-color: #ccff00;
+      }
+
+      body.theme-dark input::placeholder {
+        color: #888;
+      }
+
+      body.theme-dark .help-text {
+        background: #333;
+        color: #ccff00;
+        border-color: #ccff00;
+      }
+
+      body.theme-dark .or-divider {
+        background: #00d4e8;
+        color: #000;
+        border-color: #00d4e8;
+      }
+
+      body.theme-dark button {
+        background: #ccff00;
+        color: #000;
+        border-color: #ccff00;
+        box-shadow: 6px 6px 0 #ccff00;
+      }
+
+      body.theme-dark button:hover {
+        box-shadow: 3px 3px 0 #ccff00;
+      }
+
+      body.theme-dark button:active {
+        box-shadow: 1px 1px 0 #ccff00;
+      }
+
+      body.theme-dark button:focus-visible {
+        outline-color: #ccff00;
+      }
+
+      body.theme-dark .result {
+        background: #1a3a2a;
+        border-color: #ccff00;
+        box-shadow: 6px 6px 0 #ccff00;
+        color: #e0e0e0;
+      }
+
+      body.theme-dark .result b {
+        color: #ccff00;
+      }
+
+      body.theme-dark .highlight {
+        background: #ff6b6b;
+        color: #000;
+        border-color: #ff6b6b;
+        box-shadow: 4px 4px 0 #ff6b6b;
+      }
+
+      body.theme-dark .error-output {
+        background: #5a1a1a;
+        border-color: #ff6b6b;
+        color: #ff6b6b;
+      }
+
+      body.theme-dark .footer {
+        color: #888;
+      }
+
+      body.theme-dark .theme-btn {
+        border-color: #ccff00;
+        color: #ccff00;
+        box-shadow: 4px 4px 0 #ccff00;
+      }
+
+      body.theme-dark .theme-btn:hover {
+        box-shadow: 2px 2px 0 #ccff00;
+      }
+
+      body.theme-dark .theme-btn:active,
+      body.theme-dark .theme-btn.active {
+        box-shadow: 1px 1px 0 #ccff00;
+      }
+
+      body.theme-dark .theme-btn-default { background: #f0e6d3; color: #000; border-color: #ccff00; }
+      body.theme-dark .theme-btn-dark    { background: #1a1a1a; color: #ccff00; border-color: #ccff00; }
+      body.theme-dark .theme-btn-pink    { background: #f48fb1; color: #000; border-color: #ccff00; }
+
+      body.theme-dark .spinner {
+        border-color: #000;
+        border-top-color: transparent;
+      }
+
+      /* ─── PINK THEME ───────────────────────────────────── */
+
+      body.theme-pink {
+        background: #fce4ec;
+      }
+
+      body.theme-pink .container {
+        background: #fff0f5;
+        border-color: #ad1457;
+        box-shadow: 8px 8px 0 #ad1457;
+      }
+
+      body.theme-pink h1 {
+        color: #ad1457;
+      }
+
+      body.theme-pink label {
+        color: #880e4f;
+      }
+
+      body.theme-pink input {
+        background: #fff;
+        color: #880e4f;
+        border-color: #ad1457;
+        box-shadow: 4px 4px 0 #ad1457;
+      }
+
+      body.theme-pink input:focus {
+        background: #fff;
+        box-shadow: 2px 2px 0 #ad1457;
+      }
+
+      body.theme-pink input:focus-visible {
+        outline-color: #ad1457;
+      }
+
+      body.theme-pink input::placeholder {
+        color: #f48fb1;
+      }
+
+      body.theme-pink .help-text {
+        background: #fce4ec;
+        color: #ad1457;
+        border-color: #ad1457;
+      }
+
+      body.theme-pink .or-divider {
+        background: #e1bee7;
+        color: #6a1b9a;
+        border-color: #6a1b9a;
+      }
+
+      body.theme-pink button {
+        background: #f48fb1;
+        color: #000;
+        border-color: #ad1457;
+        box-shadow: 6px 6px 0 #ad1457;
+      }
+
+      body.theme-pink button:hover {
+        box-shadow: 3px 3px 0 #ad1457;
+      }
+
+      body.theme-pink button:active {
+        box-shadow: 1px 1px 0 #ad1457;
+      }
+
+      body.theme-pink button:focus-visible {
+        outline-color: #ad1457;
+      }
+
+      body.theme-pink .result {
+        background: #f8bbd0;
+        border-color: #ad1457;
+        box-shadow: 6px 6px 0 #ad1457;
+        color: #880e4f;
+      }
+
+      body.theme-pink .result b {
+        color: #ad1457;
+      }
+
+      body.theme-pink .highlight {
+        background: #e91e8c;
+        color: #fff;
+        border-color: #ad1457;
+        box-shadow: 4px 4px 0 #ad1457;
+      }
+
+      body.theme-pink .error-output {
+        background: #fce4ec;
+        border-color: #ad1457;
+        color: #ad1457;
+      }
+
+      body.theme-pink .footer {
+        color: #f48fb1;
+      }
+
+      body.theme-pink .theme-btn {
+        border-color: #ad1457;
+        box-shadow: 4px 4px 0 #ad1457;
+      }
+
+      body.theme-pink .theme-btn:hover {
+        box-shadow: 2px 2px 0 #ad1457;
+      }
+
+      body.theme-pink .theme-btn:active,
+      body.theme-pink .theme-btn.active {
+        box-shadow: 1px 1px 0 #ad1457;
+      }
+
+      body.theme-pink .theme-btn-default { background: #f0e6d3; color: #000; }
+      body.theme-pink .theme-btn-dark    { background: #1a1a1a; color: #f48fb1; }
+      body.theme-pink .theme-btn-pink    { background: #f48fb1; color: #000; }
+
+      @media (max-width: 480px) {
+        .theme-picker {
+          gap: 6px;
+        }
+
+        .theme-btn {
+          padding: 6px 10px;
+          font-size: 11px;
+        }
+      }
     </style>
   </head>
 
   <body>
+    <div class="theme-picker" role="group" aria-label="Choose theme">
+      <button class="theme-btn theme-btn-default active" type="button" onclick="setTheme('default')" aria-label="Default theme" aria-pressed="true" id="themeDefault">Default</button>
+      <button class="theme-btn theme-btn-dark" type="button" onclick="setTheme('dark')" aria-label="Dark theme" aria-pressed="false" id="themeDark">Dark</button>
+      <button class="theme-btn theme-btn-pink" type="button" onclick="setTheme('pink')" aria-label="Pink theme" aria-pressed="false" id="themePink">Pink</button>
+    </div>
     <main>
       <div class="container">
         <h1>Bitcoin Target Price &amp; Profit Calculator</h1>
@@ -490,6 +798,38 @@
         output.style.display = "block";
         output.innerHTML = html;
       }
+
+      function setTheme(theme) {
+        var body = document.body;
+        body.classList.remove("theme-dark", "theme-pink");
+        if (theme === "dark") {
+          body.classList.add("theme-dark");
+        } else if (theme === "pink") {
+          body.classList.add("theme-pink");
+        }
+        var btns = ["themeDefault", "themeDark", "themePink"];
+        var themes = ["default", "dark", "pink"];
+        for (var i = 0; i < btns.length; i++) {
+          var btn = document.getElementById(btns[i]);
+          var isActive = themes[i] === theme;
+          if (isActive) {
+            btn.classList.add("active");
+            btn.setAttribute("aria-pressed", "true");
+          } else {
+            btn.classList.remove("active");
+            btn.setAttribute("aria-pressed", "false");
+          }
+        }
+        try { localStorage.setItem("btc-theme", theme); } catch(e) {}
+      }
+
+      function initTheme() {
+        var saved;
+        try { saved = localStorage.getItem("btc-theme"); } catch(e) {}
+        setTheme(saved || "default");
+      }
+
+      initTheme();
 
       function calculate() {
         var btcOwned = parseFloat(document.getElementById("btcOwned").value);
