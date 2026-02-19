@@ -249,6 +249,169 @@
         padding: 10px;
       }
 
+
+      /* Live Price Section */
+      .live-price-section {
+        background: #e0e7ff;
+        border: 3px solid #000;
+        box-shadow: 4px 4px 0 #000;
+        padding: 16px;
+        margin-bottom: 25px;
+        border-radius: 0;
+      }
+
+      .live-price-header {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-bottom: 8px;
+      }
+
+      .live-indicator {
+        width: 10px;
+        height: 10px;
+        background: #22c55e;
+        border: 2px solid #000;
+        border-radius: 50%;
+        animation: pulse 2s infinite;
+      }
+
+      @keyframes pulse {
+        0%, 100% { opacity: 1; }
+        50% { opacity: 0.5; }
+      }
+
+      .live-label {
+        font-weight: 700;
+        font-size: 12px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+      }
+
+      .refresh-btn {
+        margin-left: auto;
+        background: #fef08a;
+        border: 2px solid #000;
+        padding: 4px 10px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 14px;
+        box-shadow: 2px 2px 0 #000;
+        transition: all 0.15s ease;
+      }
+
+      .refresh-btn:hover {
+        transform: translate(1px, 1px);
+        box-shadow: 1px 1px 0 #000;
+      }
+
+      .live-price-value {
+        font-size: 28px;
+        font-weight: 800;
+        color: #000;
+        margin: 8px 0;
+      }
+
+      .last-updated {
+        font-size: 11px;
+        color: #666;
+        font-weight: 600;
+      }
+
+      /* Price Error */
+      .price-error {
+        background: #fca5a5;
+        border: 3px solid #000;
+        box-shadow: 4px 4px 0 #000;
+        padding: 12px;
+        margin-bottom: 25px;
+        display: none;
+        align-items: center;
+        gap: 8px;
+        border-radius: 0;
+      }
+
+      .price-error .retry-btn {
+        margin-left: auto;
+        background: #fef08a;
+        border: 2px solid #000;
+        padding: 6px 12px;
+        cursor: pointer;
+        font-weight: 700;
+        font-size: 12px;
+        box-shadow: 2px 2px 0 #000;
+      }
+
+      /* Price Comparison */
+      .price-comparison {
+        margin-top: 20px;
+        padding-top: 20px;
+        border-top: 3px dashed #000;
+      }
+
+      .comparison-header {
+        font-weight: 700;
+        font-size: 14px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 15px;
+        text-align: center;
+        background: #a5f3fc;
+        padding: 8px;
+        border: 2px solid #000;
+      }
+
+      .comparison-grid {
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+      }
+
+      .comparison-item {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 8px 12px;
+        background: #fff;
+        border: 2px solid #000;
+      }
+
+      .comparison-label {
+        font-weight: 600;
+        font-size: 13px;
+      }
+
+      .comparison-value {
+        font-weight: 800;
+        font-size: 14px;
+      }
+
+      .highlight-row {
+        background: #d1fae5;
+      }
+
+      .highlight-row.warning {
+        background: #fca5a5;
+      }
+
+      .comparison-indicator {
+        margin-top: 15px;
+        padding: 12px;
+        text-align: center;
+        font-weight: 700;
+        font-size: 14px;
+        border: 3px solid #000;
+        box-shadow: 4px 4px 0 #000;
+      }
+
+      .comparison-indicator.success {
+        background: #d1fae5;
+      }
+
+      .comparison-indicator.warning {
+        background: #fca5a5;
+      }
+
       @media (max-width: 640px) {
         .container {
           padding: 25px 20px;
@@ -363,6 +526,24 @@
       <div class="container">
         <h1>Bitcoin Target Price &amp; Profit Calculator</h1>
 
+        <div id="livePriceSection" class="live-price-section" aria-live="polite">
+          <div class="live-price-header">
+            <span class="live-indicator"></span>
+            <span class="live-label">LIVE BTC PRICE</span>
+            <button id="refreshPriceBtn" class="refresh-btn" onclick="fetchLivePrice()" aria-label="Refresh BTC price">
+              ↻
+            </button>
+          </div>
+          <div class="live-price-value" id="livePrice">Loading...</div>
+          <div class="last-updated" id="lastUpdated"></div>
+        </div>
+
+        <div id="priceError" class="price-error">
+          <span class="error-icon">⚠️</span>
+          <span class="error-message" id="priceErrorMessage">Unable to fetch live price</span>
+          <button class="retry-btn" onclick="fetchLivePrice()">Retry</button>
+        </div>
+
         <div class="input-group">
           <label for="btcOwned">Total Bitcoins Owned (BTC):</label>
           <input
@@ -459,6 +640,120 @@
     <footer class="footer">For educational purposes only. Not financial advice.</footer>
 
     <script>
+      // Global state for live price
+      var appState = {
+        livePrice: null,
+        lastUpdated: null,
+        isLoading: false,
+        error: null,
+        refreshInterval: null
+      };
+
+      // Fetch live BTC price from CoinGecko API
+      function fetchLivePrice() {
+        if (appState.isLoading) return;
+        
+        appState.isLoading = true;
+        
+        // Show loading state
+        var livePriceEl = document.getElementById('livePrice');
+        var refreshBtn = document.getElementById('refreshPriceBtn');
+        livePriceEl.textContent = 'Loading...';
+        refreshBtn.disabled = true;
+        
+        fetch('https://api.coingecko.com/api/v3/simple/price?ids=bitcoin&vs_currencies=usd')
+          .then(function(response) {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(function(data) {
+            if (data.bitcoin && data.bitcoin.usd) {
+              updateLivePriceDisplay(data.bitcoin.usd);
+              appState.error = null;
+            } else {
+              throw new Error('Invalid data format');
+            }
+          })
+          .catch(function(error) {
+            console.error('Error fetching BTC price:', error);
+            showPriceError('Price temporarily unavailable');
+          })
+          .finally(function() {
+            appState.isLoading = false;
+            refreshBtn.disabled = false;
+          });
+      }
+
+      // Update DOM with live price
+      function updateLivePriceDisplay(price) {
+        var livePriceEl = document.getElementById('livePrice');
+        var lastUpdatedEl = document.getElementById('lastUpdated');
+        var priceErrorEl = document.getElementById('priceError');
+        var livePriceSection = document.getElementById('livePriceSection');
+        
+        appState.livePrice = price;
+        appState.lastUpdated = new Date();
+        
+        // Hide error, show price section
+        priceErrorEl.style.display = 'none';
+        livePriceSection.style.display = 'block';
+        
+        // Update price
+        livePriceEl.textContent = '$' + formatUSD(price);
+        lastUpdatedEl.textContent = 'Last updated: ' + formatTimestamp(appState.lastUpdated);
+        
+        // If results are visible, update comparison
+        var output = document.getElementById('output');
+        if (output.style.display !== 'none' && output.innerHTML.indexOf('price-comparison') !== -1) {
+          calculate();
+        }
+      }
+
+      // Show price error
+      function showPriceError(message) {
+        var priceErrorEl = document.getElementById('priceError');
+        var priceErrorMessage = document.getElementById('priceErrorMessage');
+        var livePriceSection = document.getElementById('livePriceSection');
+        
+        priceErrorMessage.textContent = message;
+        priceErrorEl.style.display = 'flex';
+        livePriceSection.style.display = 'none';
+        appState.error = message;
+      }
+
+      // Format timestamp
+      function formatTimestamp(date) {
+        return date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
+        });
+      }
+
+      // Start auto-refresh
+      function startAutoRefresh() {
+        if (appState.refreshInterval) {
+          clearInterval(appState.refreshInterval);
+        }
+        appState.refreshInterval = setInterval(fetchLivePrice, 60000); // 60 seconds
+      }
+
+      // Stop auto-refresh
+      function stopAutoRefresh() {
+        if (appState.refreshInterval) {
+          clearInterval(appState.refreshInterval);
+          appState.refreshInterval = null;
+        }
+      }
+
+      // Initialize on page load
+      document.addEventListener('DOMContentLoaded', function() {
+        fetchLivePrice();
+        startAutoRefresh();
+      });
+
       function formatUSD(value) {
         return value.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
       }
@@ -524,7 +819,7 @@
         var targetBTCPrice = targetSellValue / btcOwned;
         var achievedPercent = (desiredProfitValue / totalCost) * 100;
 
-        showResult(
+        var resultHTML =
           '<div class="highlight">' +
             "\u2705 Target BTC Price Needed: $" + formatUSD(targetBTCPrice) +
           "</div>" +
@@ -535,8 +830,54 @@
           "<b>Total Investment Cost:</b> $" + formatUSD(totalCost) + " <br>" +
           "<b>Desired Profit:</b> $" + formatUSD(desiredProfitValue) + " <br>" +
           "<b>Profit Percentage:</b> " + achievedPercent.toFixed(2) + "% <br><br>" +
-          "<b>Total Sell Value Needed:</b> $" + formatUSD(targetSellValue)
-        );
+          "<b>Total Sell Value Needed:</b> $" + formatUSD(targetSellValue);
+
+        if (appState.livePrice !== null) {
+          var currentPrice = appState.livePrice;
+          var priceDifference = targetBTCPrice - currentPrice;
+          var differencePercent = ((targetBTCPrice - currentPrice) / currentPrice) * 100;
+          var isTargetReachable = currentPrice >= targetBTCPrice;
+
+          var differenceText = "";
+          if (priceDifference > 0) {
+            differenceText = "+" + differencePercent.toFixed(2) + "% above current price";
+          } else if (priceDifference < 0) {
+            differenceText = Math.abs(differencePercent).toFixed(2) + "% below current price";
+          } else {
+            differenceText = "Matches current price exactly";
+          }
+
+          var indicatorClass = isTargetReachable ? "success" : "warning";
+          var indicatorText = isTargetReachable
+            ? "\u2705 Target is REACHABLE! Current price meets your goal."
+            : "\u26a0\ufe0f Target is ABOVE current price. BTC needs to rise.";
+
+          var highlightRowClass = isTargetReachable ? "highlight-row" : "highlight-row warning";
+
+          resultHTML +=
+            '<div class="price-comparison">' +
+              '<div class="comparison-header">PRICE COMPARISON</div>' +
+              '<div class="comparison-grid">' +
+                '<div class="comparison-item">' +
+                  '<span class="comparison-label">Current BTC Price:</span>' +
+                  '<span class="comparison-value">$' + formatUSD(currentPrice) + '</span>' +
+                '</div>' +
+                '<div class="comparison-item">' +
+                  '<span class="comparison-label">Your Target Price:</span>' +
+                  '<span class="comparison-value">$' + formatUSD(targetBTCPrice) + '</span>' +
+                '</div>' +
+                '<div class="comparison-item ' + highlightRowClass + '">' +
+                  '<span class="comparison-label">Difference:</span>' +
+                  '<span class="comparison-value">' + differenceText + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="comparison-indicator ' + indicatorClass + '">' +
+                indicatorText +
+              '</div>' +
+            '</div>';
+        }
+
+        showResult(resultHTML);
       }
     </script>
   </body>
