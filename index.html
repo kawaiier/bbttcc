@@ -725,10 +725,10 @@
 
       // Format timestamp
       function formatTimestamp(date) {
-        return date.toLocaleTimeLine('en-US', { 
-          hour: '2-digit', 
-          minute: '2-digit', 
-          second: '2-digit' 
+        return date.toLocaleTimeString('en-US', {
+          hour: '2-digit',
+          minute: '2-digit',
+          second: '2-digit'
         });
       }
 
@@ -819,7 +819,7 @@
         var targetBTCPrice = targetSellValue / btcOwned;
         var achievedPercent = (desiredProfitValue / totalCost) * 100;
 
-        showResult(
+        var resultHTML =
           '<div class="highlight">' +
             "\u2705 Target BTC Price Needed: $" + formatUSD(targetBTCPrice) +
           "</div>" +
@@ -830,8 +830,54 @@
           "<b>Total Investment Cost:</b> $" + formatUSD(totalCost) + " <br>" +
           "<b>Desired Profit:</b> $" + formatUSD(desiredProfitValue) + " <br>" +
           "<b>Profit Percentage:</b> " + achievedPercent.toFixed(2) + "% <br><br>" +
-          "<b>Total Sell Value Needed:</b> $" + formatUSD(targetSellValue)
-        );
+          "<b>Total Sell Value Needed:</b> $" + formatUSD(targetSellValue);
+
+        if (appState.livePrice !== null) {
+          var currentPrice = appState.livePrice;
+          var priceDifference = targetBTCPrice - currentPrice;
+          var differencePercent = ((targetBTCPrice - currentPrice) / currentPrice) * 100;
+          var isTargetReachable = currentPrice >= targetBTCPrice;
+
+          var differenceText = "";
+          if (priceDifference > 0) {
+            differenceText = "+" + differencePercent.toFixed(2) + "% above current price";
+          } else if (priceDifference < 0) {
+            differenceText = Math.abs(differencePercent).toFixed(2) + "% below current price";
+          } else {
+            differenceText = "Matches current price exactly";
+          }
+
+          var indicatorClass = isTargetReachable ? "success" : "warning";
+          var indicatorText = isTargetReachable
+            ? "\u2705 Target is REACHABLE! Current price meets your goal."
+            : "\u26a0\ufe0f Target is ABOVE current price. BTC needs to rise.";
+
+          var highlightRowClass = isTargetReachable ? "highlight-row" : "highlight-row warning";
+
+          resultHTML +=
+            '<div class="price-comparison">' +
+              '<div class="comparison-header">PRICE COMPARISON</div>' +
+              '<div class="comparison-grid">' +
+                '<div class="comparison-item">' +
+                  '<span class="comparison-label">Current BTC Price:</span>' +
+                  '<span class="comparison-value">$' + formatUSD(currentPrice) + '</span>' +
+                '</div>' +
+                '<div class="comparison-item">' +
+                  '<span class="comparison-label">Your Target Price:</span>' +
+                  '<span class="comparison-value">$' + formatUSD(targetBTCPrice) + '</span>' +
+                '</div>' +
+                '<div class="comparison-item ' + highlightRowClass + '">' +
+                  '<span class="comparison-label">Difference:</span>' +
+                  '<span class="comparison-value">' + differenceText + '</span>' +
+                '</div>' +
+              '</div>' +
+              '<div class="comparison-indicator ' + indicatorClass + '">' +
+                indicatorText +
+              '</div>' +
+            '</div>';
+        }
+
+        showResult(resultHTML);
       }
     </script>
   </body>
